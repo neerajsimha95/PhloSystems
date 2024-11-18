@@ -1,0 +1,6 @@
+@PhloSystems_HostAddress = http://localhost:5058
+
+GET {{PhloSystems_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
