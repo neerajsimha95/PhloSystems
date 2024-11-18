@@ -60,7 +60,7 @@ public class ProductService : IProductService
     }
     private List<Product> ApplyFilters(GetProductsInputModel input, List<Product>? products)
     {
-        if(!string.IsNullOrEmpty(input.Highlight))
+        if (!string.IsNullOrEmpty(input.Highlight))
         {
             products = products?.ConvertAll(product =>
                       new Product
@@ -68,16 +68,16 @@ public class ProductService : IProductService
                           Title = product.Title,
                           Price = product.Price,
                           Sizes = product.Sizes,
-                          Description =  HighlightDescription(product.Description, input.Highlight),
+                          Description = HighlightDescription(product.Description, input.Highlight),
                       });
-        }    
+        }
         return products.WhereIf(input.MinPrice.HasValue, e => e.Price >= input.MinPrice)
             .WhereIf(input.MaxPrice.HasValue, e => e.Price <= input.MaxPrice)
-            .WhereIf(!string.IsNullOrEmpty(input.Size), e => e.Sizes.Any(x=>input.Size.Split(",").Contains(x))).ToList();
+            .WhereIf(!string.IsNullOrEmpty(input.Size), e => e.Sizes.Any(x => input.Size.Split(",").Contains(x))).ToList();
     }
     private string HighlightDescription(string? description, string highlight)
     {
-        if(!string.IsNullOrEmpty(highlight) && !string.IsNullOrEmpty(description))
+        if (!string.IsNullOrEmpty(highlight) && !string.IsNullOrEmpty(description))
         {
             foreach (var item in highlight.Split(","))
             {
