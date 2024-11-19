@@ -1,9 +1,9 @@
-﻿using PhloSystems.Domain.Dto;
-namespace PhloSystems.Service.Contract;
+﻿namespace PhloSystems.Service.Contract;
 
 using PhloSystems.Domain.RequestDto;
+using PhloSystems.Domain.Dto;
 
 public interface IProductService
 {
-    Task<List<ProductDto>> GetProductsAsync(GetProductsInputModel input);
+    Task<ResponseResultDto> GetProductsAsync(GetProductsInputModel input);
 }

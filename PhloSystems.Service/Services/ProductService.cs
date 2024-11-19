@@ -24,11 +24,11 @@ public class ProductService : IProductService
         _httpClientFactory = httpClientFactory;
 
     }
-    public async Task<List<ProductDto>> GetProductsAsync(GetProductsInputModel input)
+    public async Task<ResponseResultDto> GetProductsAsync(GetProductsInputModel input)
     {
         try
         {
-            List<Product> products = new List<Product>();
+            var responseResult= new ResponseResultDto();
             var endpoint = _configuration.GetSection("ThirdPartyAPIs")["ProductsEndpoint"];
             if (string.IsNullOrEmpty(endpoint))
             {
@@ -47,10 +47,11 @@ public class ProductService : IProductService
 
                 if (parsedResponse != null)
                 {
-                    products = ApplyFilters(input, parsedResponse.Products);
+                    responseResult.Products = _mapper.Map<List<ProductDto>>(ApplyFilters(input, parsedResponse.Products));
+                    responseResult.ProductFilter = _mapper.Map<ProductFiltersDto>(responseResult.Products);
                 }
             }
-            return _mapper.Map<List<ProductDto>>(products);
+            return responseResult;
         }
         catch (HttpRequestException e)
         {
@@ -75,7 +76,7 @@ public class ProductService : IProductService
             .WhereIf(input.MaxPrice.HasValue, e => e.Price <= input.MaxPrice)
             .WhereIf(!string.IsNullOrEmpty(input.Size), e => e.Sizes.Any(x => input.Size.Split(",").Contains(x))).ToList();
     }
-    private string HighlightDescription(string? description, string highlight)
+    private string? HighlightDescription(string? description, string highlight)
     {
         if (!string.IsNullOrEmpty(highlight) && !string.IsNullOrEmpty(description))
         {
