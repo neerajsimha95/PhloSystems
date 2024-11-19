@@ -13,12 +13,14 @@ public class ProductControllerTests
 {
     private readonly IProductService _productServiceFake;
     private readonly ProductController _controller;
+    private readonly ILogger<ProductController> _logger;
 
     public ProductControllerTests()
     {
         // Arrange: Create a fake product service
         _productServiceFake = A.Fake<IProductService>();
-        _controller = new ProductController(_productServiceFake,null);
+        _logger = A.Fake<ILogger<ProductController>>();
+        _controller = new ProductController(_productServiceFake, _logger);
     }
 
     [Fact]
